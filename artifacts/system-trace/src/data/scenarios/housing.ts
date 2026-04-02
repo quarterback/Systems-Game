@@ -1,4 +1,4 @@
-import type { Scenario } from './types';
+import type { Scenario } from '../types';
 
 export const HOUSING_SCENARIO: Scenario = {
   id: 'housing-assistance',
