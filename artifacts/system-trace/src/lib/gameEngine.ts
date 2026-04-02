@@ -67,7 +67,11 @@ export function computeResult(
     });
   }
 
-  const vaScore = vpScore - veScore + vrScore;
+  // Clamp component scores before computing Va so displayed values always sum correctly
+  const clampedVp = Math.max(-10, Math.min(10, vpScore));
+  const clampedVe = Math.max(0, Math.min(15, veScore));
+  const clampedVr = Math.max(-5, Math.min(5, vrScore));
+  const vaScore = clampedVp - clampedVe + clampedVr;
 
   // Resolve outcome type, headline, and narrative from scenario.outcomeRules
   let outcomeType: GameResult['outcomeType'] = 'housed-barely';
@@ -111,9 +115,9 @@ export function computeResult(
 
   return {
     decisions,
-    vpScore: Math.max(-10, Math.min(10, vpScore)),
-    veScore: Math.max(0, Math.min(15, veScore)),
-    vrScore: Math.max(-5, Math.min(5, vrScore)),
+    vpScore: clampedVp,
+    veScore: clampedVe,
+    vrScore: clampedVr,
     vaScore,
     daysElapsed,
     approved,

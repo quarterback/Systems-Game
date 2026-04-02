@@ -473,14 +473,6 @@ export const HOUSING_SCENARIO: Scenario = {
       narrative:
         'Marcus\'s application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted since. But he was referred to Legal Aid SF before the official letter went out. He has filed an appeal citing the hardship exception clause. His case is pending. He has been in emergency shelter for six weeks. He has not missed a day of work.',
     },
-    // Denied + letter → letter went to wrong address, appeal window closed
-    {
-      requires: { policy: ['deny'], interface: ['letter'] },
-      outcomeType: 'denied-lost',
-      headline: 'Denied. Never knew why.',
-      narrative:
-        'Marcus\'s application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted for inflation or cost of living since. His denial letter was sent to 2347 Alcott Street — his former address, now managed by Citadel Property Group\'s building supervisor. He never received it. His appeal window expired 60 days later. He is currently in a family shelter on Turk Street with Destiny and Andre. He has not missed a day of work.',
-    },
     // Denied + direct call → informed of denial, but no legal support
     {
       requires: { policy: ['deny'], interface: ['call'] },
