@@ -1,22 +1,23 @@
-import type { GameResult, CascadeEvent, RoleId } from '../data/types';
-import { HOUSING_SCENARIO } from '../data/scenario';
+import type { GameResult, CascadeEvent, RoleId, Role, Scenario } from '../data/types';
 
-export function computeResult(decisions: Record<RoleId, string>): GameResult {
-  const scenario = HOUSING_SCENARIO;
+/**
+ * Compute the full game result from a set of player decisions.
+ * The engine derives role order from scenario.decisions — no hardcoded ordering.
+ */
+export function computeResult(
+  decisions: Record<RoleId, string>,
+  scenario: Scenario
+): GameResult {
   let vpScore = 0;
   let veScore = 1; // Marcus's baseline burden: took half-day off, arranged childcare
   let vrScore = 0;
   let daysElapsed = 3; // Day 3 when he first walked in
 
   const cascadeEvents: CascadeEvent[] = [];
-  let finalOutcome: boolean | 'pending' = false;
 
-  const roleOrder: RoleId[] = ['frontline', 'operations', 'policy', 'interface'];
-
-  for (const roleId of roleOrder) {
-    const decisionPoint = scenario.decisions.find((d) => d.roleId === roleId);
-    if (!decisionPoint) continue;
-
+  // Role order derived from scenario.decisions, not hardcoded
+  for (const decisionPoint of scenario.decisions) {
+    const roleId = decisionPoint.roleId;
     const chosenId = decisions[roleId];
     const chosenOption = decisionPoint.options.find((o) => o.id === chosenId);
     if (!chosenOption) continue;
@@ -27,15 +28,6 @@ export function computeResult(decisions: Record<RoleId, string>): GameResult {
     veScore += effects.ve;
     vrScore += effects.vr;
     daysElapsed += effects.daysAdded;
-
-    if (effects.outcome) {
-      finalOutcome =
-        effects.outcome === 'approved'
-          ? true
-          : effects.outcome === 'denied'
-          ? false
-          : 'pending';
-    }
 
     cascadeEvents.push({
       roleId,
@@ -51,23 +43,14 @@ export function computeResult(decisions: Record<RoleId, string>): GameResult {
     });
   }
 
-  // If policy decision defaulted to pending without resolution, mark as pending
-  if (finalOutcome === 'pending' && decisions['policy'] === 'verify') {
-    finalOutcome = 'pending';
-  } else if (finalOutcome === false && decisions['policy'] !== 'deny') {
-    // If policy didn't explicitly deny, treat as approved
-    finalOutcome = true;
-  }
-
   const vaScore = vpScore - veScore + vrScore;
-
-  // Determine outcome type and narrative
-  let outcomeType: GameResult['outcomeType'];
-  let outcomeHeadline: string;
-  let outcomeNarrative: string;
 
   const policyDecision = decisions['policy'];
   const interfaceDecision = decisions['interface'];
+
+  let outcomeType: GameResult['outcomeType'];
+  let outcomeHeadline: string;
+  let outcomeNarrative: string;
 
   if (policyDecision === 'deny') {
     if (interfaceDecision === 'legalaid') {
@@ -79,8 +62,8 @@ export function computeResult(decisions: Record<RoleId, string>): GameResult {
       outcomeHeadline = 'Denied. Never knew why.';
       const letterNote =
         interfaceDecision === 'letter'
-          ? " His denial letter was sent to 2347 Alcott Street — his former address, now managed by Citadel Property Group's building supervisor. He never received it. His appeal window expired 60 days later."
-          : " He was informed of the denial by phone. He asked what he could do. He was told he could appeal within 60 days. He did not know how.";
+          ? ' His denial letter was sent to 2347 Alcott Street — his former address, now managed by Citadel Property Group\'s building supervisor. He never received it. His appeal window expired 60 days later.'
+          : ' He was informed of the denial by phone. He asked what he could do. He was told he could appeal within 60 days. He did not know how.';
       outcomeNarrative = `Marcus's application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted for inflation or cost of living since.${letterNote} He is currently in a family shelter on Turk Street with Destiny and Andre. He has not missed a day of work.`;
     }
   } else if (policyDecision === 'verify') {
@@ -100,8 +83,7 @@ export function computeResult(decisions: Record<RoleId, string>): GameResult {
   } else {
     outcomeType = 'housed-barely';
     outcomeHeadline = 'Outcome unclear.';
-    outcomeNarrative =
-      'The system processed Marcus\'s case. The outcome is uncertain.';
+    outcomeNarrative = 'The system processed Marcus\'s case. The outcome is uncertain.';
   }
 
   return {
@@ -119,39 +101,38 @@ export function computeResult(decisions: Record<RoleId, string>): GameResult {
   };
 }
 
-export function getRoles() {
-  return [
-    {
-      id: 'frontline' as RoleId,
-      title: 'Intake Coordinator',
-      subtitle: 'Frontline Worker',
-      description:
-        'You are the first point of contact. You decide how Marcus enters the system — or whether he does at all. Your authority is bounded: you cannot change policy, waive requirements, or allocate housing. You can determine urgency.',
-      color: '#c8974a',
-    },
-    {
-      id: 'operations' as RoleId,
-      title: 'Documentation Specialist',
-      subtitle: 'Operations & Coordination',
-      description:
-        'You manage the flow of information through the system. You verify documents, apply policy standards, and decide what "complete" means in practice. You cannot write policy. You can interpret it.',
-      color: '#4a90a3',
-    },
-    {
-      id: 'policy' as RoleId,
-      title: 'Eligibility Officer',
-      subtitle: 'Policy & Compliance',
-      description:
-        'You make the eligibility ruling. You interpret the rules and apply them to Marcus\'s case. You cannot change the threshold. You can exercise the exception that exists — if you choose to.',
-      color: '#8a7ab0',
-    },
-    {
-      id: 'interface' as RoleId,
-      title: 'Navigation Counselor',
-      subtitle: 'Service Interface Layer',
-      description:
-        'You translate the system\'s decision into Marcus\'s lived experience. You cannot change the outcome. You can determine whether he learns what it is — and what, if anything, he can do.',
-      color: '#5a9a6a',
-    },
-  ];
+/**
+ * Derive the role list from scenario decisions — no hardcoded role order.
+ */
+export function getRolesFromScenario(scenario: Scenario): Role[] {
+  const colorMap: Record<string, string> = {
+    frontline: '#c8974a',
+    operations: '#4a90a3',
+    policy: '#8a7ab0',
+    interface: '#5a9a6a',
+  };
+  const subtitleMap: Record<string, string> = {
+    frontline: 'Frontline Worker',
+    operations: 'Operations & Coordination',
+    policy: 'Policy & Compliance',
+    interface: 'Service Interface Layer',
+  };
+  const descriptionMap: Record<string, string> = {
+    frontline:
+      'You are the first point of contact. You decide how Marcus enters the system — or whether he does at all. Your authority is bounded: you cannot change policy, waive requirements, or allocate housing. You can determine urgency.',
+    operations:
+      'You manage the flow of information through the system. You verify documents, apply policy standards, and decide what "complete" means in practice. You cannot write policy. You can interpret it.',
+    policy:
+      'You make the eligibility ruling. You interpret the rules and apply them to Marcus\'s case. You cannot change the threshold. You can exercise the exception that exists — if you choose to.',
+    interface:
+      'You translate the system\'s decision into Marcus\'s lived experience. You cannot change the outcome. You can determine whether he learns what it is — and what, if anything, he can do.',
+  };
+
+  return scenario.decisions.map((dp) => ({
+    id: dp.roleId,
+    title: dp.actorTitle,
+    subtitle: subtitleMap[dp.roleId] ?? dp.roleId,
+    description: descriptionMap[dp.roleId] ?? '',
+    color: colorMap[dp.roleId] ?? '#888',
+  }));
 }

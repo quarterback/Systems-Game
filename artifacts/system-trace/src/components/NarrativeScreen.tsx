@@ -1,21 +1,20 @@
-import { HOUSING_SCENARIO } from '../data/scenario';
+import type { Scenario } from '../data/types';
 
 interface NarrativeScreenProps {
+  scenario: Scenario;
   onComplete: () => void;
 }
 
-export function NarrativeScreen({ onComplete }: NarrativeScreenProps) {
-  const { narrativeBeats } = HOUSING_SCENARIO;
-
+export function NarrativeScreen({ scenario, onComplete }: NarrativeScreenProps) {
+  const { narrativeBeats } = scenario;
   const dataBeats = narrativeBeats.filter((b) => b.type === 'data');
 
-  // Group data beats together
   let renderedDataBlock = false;
 
   return (
     <div className="narrative-screen">
       <div className="narrative-content">
-        <div className="narrative-eyebrow">Scenario · Emergency Housing Assistance</div>
+        <div className="narrative-eyebrow">Scenario · {scenario.title}</div>
 
         {narrativeBeats.map((beat, i) => {
           if (beat.type === 'data') {

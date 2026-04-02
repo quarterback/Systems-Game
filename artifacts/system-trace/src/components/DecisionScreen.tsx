@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import type { Role, RoleId, DecisionOption } from '../data/types';
-import { HOUSING_SCENARIO } from '../data/scenario';
+import type { Role, RoleId, DecisionOption, Scenario } from '../data/types';
 
 interface DecisionScreenProps {
   roleIndex: number;
   roles: Role[];
+  scenario: Scenario;
   playerNames: string[];
   decisions: Record<RoleId, string>;
   onDecide: (roleId: RoleId, optionId: string) => void;
@@ -32,6 +32,7 @@ function getOptionAvailability(
 export function DecisionScreen({
   roleIndex,
   roles,
+  scenario,
   playerNames,
   decisions,
   onDecide,
@@ -39,17 +40,16 @@ export function DecisionScreen({
   const [selected, setSelected] = useState<string | null>(null);
 
   const role = roles[roleIndex];
-  const decisionPoint = HOUSING_SCENARIO.decisions.find((d) => d.roleId === role.id);
+  const decisionPoint = scenario.decisions.find((d) => d.roleId === role.id);
   if (!decisionPoint) return null;
 
   const playerName = playerNames[roleIndex] || `Player ${roleIndex + 1}`;
   const progress = (roleIndex / roles.length) * 100;
 
-  // Resolve conditional context based on the prior role's decision
+  // Resolve conditional context based on prior decisions
   let contextNote = decisionPoint.contextIntro;
   if (decisionPoint.conditionalContext) {
     if (role.id === 'interface') {
-      // Interface context depends on the policy outcome
       const policyChoice = decisions['policy'];
       const contextKey =
         policyChoice === 'approve' ? 'approved' : policyChoice === 'deny' ? 'denied' : 'pending';
@@ -57,21 +57,21 @@ export function DecisionScreen({
         contextNote = decisionPoint.conditionalContext[contextKey];
       }
     } else {
-      // For operations, use the frontline decision key
       const prevRoleId = roleIndex > 0 ? roles[roleIndex - 1].id : null;
-      if (prevRoleId && decisions[prevRoleId] && decisionPoint.conditionalContext[decisions[prevRoleId]]) {
+      if (
+        prevRoleId &&
+        decisions[prevRoleId] &&
+        decisionPoint.conditionalContext[decisions[prevRoleId]]
+      ) {
         contextNote = decisionPoint.conditionalContext[decisions[prevRoleId]];
       }
     }
   }
 
-  // Annotate options with availability
   const annotatedOptions = decisionPoint.options.map((option) => ({
     option,
     ...getOptionAvailability(option, decisions),
   }));
-
-  const hasSelectableOptions = annotatedOptions.some((o) => o.available);
 
   const handleConfirm = () => {
     if (selected) onDecide(role.id, selected);
@@ -88,7 +88,9 @@ export function DecisionScreen({
         <div className="decision-sidebar">
           <div className="decision-role-badge">{role.subtitle}</div>
           <div className="decision-actor-name">{decisionPoint.actorName}</div>
-          <div className="decision-actor-title">{decisionPoint.actorTitle} · {decisionPoint.actorYears} years</div>
+          <div className="decision-actor-title">
+            {decisionPoint.actorTitle} · {decisionPoint.actorYears} years
+          </div>
 
           <div className="decision-pressure-card">
             <div className="decision-pressure-label">System Pressure</div>
@@ -157,7 +159,11 @@ export function DecisionScreen({
                   {isLocked && reason ? (
                     <div
                       className="option-subtext"
-                      style={{ borderLeftColor: 'var(--ve-color)', color: 'var(--ve-color)', opacity: 0.75 }}
+                      style={{
+                        borderLeftColor: 'var(--ve-color)',
+                        color: 'var(--ve-color)',
+                        opacity: 0.75,
+                      }}
                     >
                       {reason}
                     </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import type { RoleId, GameResult } from './data/types';
-import { computeResult, getRoles } from './lib/gameEngine';
+import type { RoleId, GameResult, Scenario } from './data/types';
+import { SCENARIOS, DEFAULT_SCENARIO_ID } from './data/scenarios/index';
+import { computeResult, getRolesFromScenario } from './lib/gameEngine';
 import { IntroScreen } from './components/IntroScreen';
 import { RoleAssignment } from './components/RoleAssignment';
 import { NarrativeScreen } from './components/NarrativeScreen';
@@ -23,7 +24,9 @@ export default function App() {
     {} as Record<RoleId, string>
   );
 
-  const roles = getRoles();
+  // Scenario derived from registry — swap the id to change scenarios
+  const scenario: Scenario = SCENARIOS[DEFAULT_SCENARIO_ID];
+  const roles = getRolesFromScenario(scenario);
 
   const handleIntroComplete = () => setStage({ name: 'role-select' });
 
@@ -44,7 +47,7 @@ export default function App() {
     const nextIndex = currentRoleIndex + 1;
 
     if (nextIndex >= roles.length) {
-      const result = computeResult(newDecisions);
+      const result = computeResult(newDecisions, scenario);
       setStage({ name: 'cascade', result });
     } else {
       setStage({ name: 'decision', roleIndex: nextIndex });
@@ -74,13 +77,14 @@ export default function App() {
         />
       )}
       {stage.name === 'narrative' && (
-        <NarrativeScreen onComplete={handleNarrativeComplete} />
+        <NarrativeScreen scenario={scenario} onComplete={handleNarrativeComplete} />
       )}
       {stage.name === 'decision' && (
         <DecisionScreen
           key={stage.roleIndex}
           roleIndex={stage.roleIndex}
           roles={roles}
+          scenario={scenario}
           playerNames={playerNames}
           decisions={decisions}
           onDecide={handleDecision}
