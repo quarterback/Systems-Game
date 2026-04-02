@@ -229,6 +229,45 @@ No engine or component changes needed. The UI reads everything from the scenario
 - **Vr** (Relational Trust): Did the applicant's trust in public institutions increase or decrease? Clamped to [-5, 5].
 - **Va** (Total Administrative Value): Vp - Ve + Vr. Can be negative. A positive Va means the system created net value. A negative Va means it destroyed value even if it technically "worked."
 
+## Deploying to GitHub Pages
+
+The project builds to static HTML/CSS/JS with no server required. To deploy on GitHub Pages:
+
+1. Copy the `artifacts/system-trace/` directory into its own repo (or use it as the root of a new repo).
+2. The `package.json` has no Replit-specific hard dependencies. Replit plugins are in `optionalDependencies` and the vite config only loads them when `REPL_ID` is set, so they're skipped on GitHub Actions.
+3. Add a `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --no-optional
+      - run: BASE_PATH=/your-repo-name/ pnpm run build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/public
+```
+
+4. Replace `your-repo-name` with the actual GitHub repo name.
+5. In GitHub repo settings, set Pages source to the `gh-pages` branch.
+6. The app will be live at `https://yourusername.github.io/your-repo-name/`.
+
+If deploying to the root of a custom domain, set `BASE_PATH=/` instead.
+
 ## File Structure
 
 ```
