@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Role, RoleId } from '../data/types';
+import type { Role, RoleId, DecisionOption } from '../data/types';
 import { HOUSING_SCENARIO } from '../data/scenario';
 
 interface DecisionScreenProps {
@@ -8,6 +8,25 @@ interface DecisionScreenProps {
   playerNames: string[];
   decisions: Record<RoleId, string>;
   onDecide: (roleId: RoleId, optionId: string) => void;
+}
+
+function getOptionAvailability(
+  option: DecisionOption,
+  decisions: Record<RoleId, string>
+): { available: boolean; reason?: string } {
+  if (option.unavailableWhen) {
+    const priorDecision = decisions[option.unavailableWhen.roleId];
+    if (priorDecision && option.unavailableWhen.optionIds.includes(priorDecision)) {
+      return { available: false, reason: option.unavailableWhen.reason };
+    }
+  }
+  if (option.availableWhen) {
+    const priorDecision = decisions[option.availableWhen.roleId];
+    if (!priorDecision || !option.availableWhen.optionIds.includes(priorDecision)) {
+      return { available: false, reason: 'Not applicable given the current case state.' };
+    }
+  }
+  return { available: true };
 }
 
 export function DecisionScreen({
@@ -24,24 +43,35 @@ export function DecisionScreen({
   if (!decisionPoint) return null;
 
   const playerName = playerNames[roleIndex] || `Player ${roleIndex + 1}`;
-  const progress = ((roleIndex) / roles.length) * 100;
+  const progress = (roleIndex / roles.length) * 100;
 
-  // Get conditional context based on previous decisions
+  // Resolve conditional context based on the prior role's decision
   let contextNote = decisionPoint.contextIntro;
   if (decisionPoint.conditionalContext) {
-    const prevRoleId = roleIndex > 0 ? roles[roleIndex - 1].id : null;
-    if (prevRoleId && decisions[prevRoleId] && decisionPoint.conditionalContext[decisions[prevRoleId]]) {
-      contextNote = decisionPoint.conditionalContext[decisions[prevRoleId]];
-    }
-    // For interface role, get approved/denied/pending from policy decision
-    if (role.id === 'interface' && decisions['policy']) {
+    if (role.id === 'interface') {
+      // Interface context depends on the policy outcome
       const policyChoice = decisions['policy'];
-      const contextKey = policyChoice === 'approve' ? 'approved' : policyChoice === 'deny' ? 'denied' : 'pending';
+      const contextKey =
+        policyChoice === 'approve' ? 'approved' : policyChoice === 'deny' ? 'denied' : 'pending';
       if (decisionPoint.conditionalContext[contextKey]) {
         contextNote = decisionPoint.conditionalContext[contextKey];
       }
+    } else {
+      // For operations, use the frontline decision key
+      const prevRoleId = roleIndex > 0 ? roles[roleIndex - 1].id : null;
+      if (prevRoleId && decisions[prevRoleId] && decisionPoint.conditionalContext[decisions[prevRoleId]]) {
+        contextNote = decisionPoint.conditionalContext[decisions[prevRoleId]];
+      }
     }
   }
+
+  // Annotate options with availability
+  const annotatedOptions = decisionPoint.options.map((option) => ({
+    option,
+    ...getOptionAvailability(option, decisions),
+  }));
+
+  const hasSelectableOptions = annotatedOptions.some((o) => o.available);
 
   const handleConfirm = () => {
     if (selected) onDecide(role.id, selected);
@@ -80,26 +110,73 @@ export function DecisionScreen({
           <h2 className="decision-framing">{decisionPoint.framing}</h2>
 
           <div className="options-list">
-            {decisionPoint.options.map((option) => (
-              <button
-                key={option.id}
-                className={`option-card${selected === option.id ? ' selected' : ''}`}
-                style={{ '--role-color': role.color } as React.CSSProperties}
-                onClick={() => setSelected(option.id)}
-              >
-                <div className="option-label">{option.label}</div>
-                {option.policyRef && (
-                  <div className="option-policy-ref">{option.policyRef}</div>
-                )}
-                <p className="option-description">{option.description}</p>
-                <div className="option-subtext">{option.subtext}</div>
-              </button>
-            ))}
+            {annotatedOptions.map(({ option, available, reason }) => {
+              const isSelected = selected === option.id;
+              const isLocked = !available;
+
+              return (
+                <button
+                  key={option.id}
+                  className={`option-card${isSelected ? ' selected' : ''}${isLocked ? ' locked' : ''}`}
+                  style={
+                    {
+                      '--role-color': role.color,
+                      opacity: isLocked ? 0.48 : 1,
+                      cursor: isLocked ? 'not-allowed' : 'pointer',
+                    } as React.CSSProperties
+                  }
+                  onClick={() => !isLocked && setSelected(option.id)}
+                  disabled={isLocked}
+                >
+                  <div className="option-label">
+                    {option.label}
+                    {isLocked && (
+                      <span
+                        style={{
+                          marginLeft: 10,
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 9,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          color: 'var(--ve-color)',
+                          border: '1px solid var(--ve-color)',
+                          padding: '2px 7px',
+                          borderRadius: 2,
+                          fontWeight: 400,
+                          opacity: 0.7,
+                        }}
+                      >
+                        Not available
+                      </span>
+                    )}
+                  </div>
+                  {option.policyRef && (
+                    <div className="option-policy-ref">{option.policyRef}</div>
+                  )}
+                  <p className="option-description">{option.description}</p>
+                  {isLocked && reason ? (
+                    <div
+                      className="option-subtext"
+                      style={{ borderLeftColor: 'var(--ve-color)', color: 'var(--ve-color)', opacity: 0.75 }}
+                    >
+                      {reason}
+                    </div>
+                  ) : (
+                    <div className="option-subtext">{option.subtext}</div>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           <div className="decision-action-row">
             <p className="decision-hint">
               Discuss as a team. {playerName} makes the final call.
+              {annotatedOptions.some((o) => !o.available) && (
+                <span style={{ display: 'block', marginTop: 6, color: 'var(--text-dim)' }}>
+                  Some options are unavailable given earlier decisions in this case.
+                </span>
+              )}
             </p>
             <button
               className="btn-primary"

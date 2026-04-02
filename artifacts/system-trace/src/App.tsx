@@ -78,6 +78,7 @@ export default function App() {
       )}
       {stage.name === 'decision' && (
         <DecisionScreen
+          key={stage.roleIndex}
           roleIndex={stage.roleIndex}
           roles={roles}
           playerNames={playerNames}

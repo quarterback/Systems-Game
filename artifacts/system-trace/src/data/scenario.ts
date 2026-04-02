@@ -172,11 +172,11 @@ export const HOUSING_SCENARIO: Scenario = {
         'Marcus\'s file has arrived. His documents include: government-issued ID, eviction notice, pay stub, and an expired lease. Missing: a utility bill in his name.',
       conditionalContext: {
         standard:
-          'The file entered the standard queue on Day 3. It sat in the system for 21 business days before reaching you.',
+          'The file entered the standard queue on Day 3. It sat in the system for 21 business days before reaching you. There is no utility bill on file.',
         expedited:
-          'Your supervisor has flagged this as a priority file and asked you to clear it within 48 hours.',
+          'Your supervisor has flagged this as a priority file and asked you to clear it within 48 hours. There is no utility bill on file.',
         hold:
-          'Marcus returned on Day 12. He brought a letter from his former landlord, Mr. Adeyemi, confirming that utilities were included in the rent at 2347 Alcott Street.',
+          'Marcus returned on Day 12 with a letter from his former landlord, Mr. Adeyemi, confirming that utilities were included in the rent at 2347 Alcott Street. This letter is now part of the file. He cannot be asked to supply a utility bill again.',
       },
       framing:
         'The documentation gap is real. But so is the policy that allows you to use discretion. How do you handle the missing utility bill?',
@@ -189,6 +189,15 @@ export const HOUSING_SCENARIO: Scenario = {
             'Generate a deficiency notice. Marcus has 5 business days to submit a utility bill or approved alternative before the file is closed.',
           subtext:
             '"Policy is policy. I\'m not qualified to determine what counts as a substitute."',
+          // If frontline issued a hold and Marcus came back with the landlord letter,
+          // issuing another deficiency notice is procedurally blocked — he has already
+          // returned with alternative documentation. This option is locked.
+          unavailableWhen: {
+            roleId: 'frontline',
+            optionIds: ['hold'],
+            reason:
+              'Marcus already returned with a landlord letter confirming utilities-included rent. A second deficiency notice for the same item is procedurally invalid and would be overturned on supervisory review.',
+          },
           effects: {
             vp: -1,
             ve: 2,
@@ -227,6 +236,15 @@ export const HOUSING_SCENARIO: Scenario = {
             'Flag to your supervisor for a formal policy interpretation before proceeding. Estimated 7–10 business day turnaround.',
           subtext:
             '"I shouldn\'t be making unilateral policy interpretations. This is above my authority."',
+          // If Rosa already expedited, the supervisor has already reviewed this case
+          // and a second escalation to the same supervisor reads as a stall.
+          // We surface this as a locked option with explanation.
+          unavailableWhen: {
+            roleId: 'frontline',
+            optionIds: ['expedited'],
+            reason:
+              'The supervisor already countersigned this file for expedited review. Escalating back to the same supervisor for a documentation question would be flagged as a delay. Your supervisor\'s countersignature implicitly authorizes discretion.',
+          },
           effects: {
             vp: -1,
             ve: 1,
@@ -301,6 +319,15 @@ export const HOUSING_SCENARIO: Scenario = {
             'Pause the case. Request 30 days of bank statements and a letter from his employer confirming income before making a ruling.',
           subtext:
             '"I need more information before invoking an exception. Bank statements will clarify his actual financial position."',
+          // If the case came in expedited and operations cleared it within 48 hours,
+          // an income verification request at Day 4 is extremely difficult to defend —
+          // his pay stub already shows verified city employment income.
+          unavailableWhen: {
+            roleId: 'frontline',
+            optionIds: ['expedited'],
+            reason:
+              'This file was flagged expedited by intake and cleared by documentation within 48 hours. His income source is city employment — his pay stub is already a verified government document. A request for bank statements here would face supervisory challenge as a delay tactic and is not defensible on this file.',
+          },
           effects: {
             vp: -1,
             ve: 2,
@@ -344,6 +371,15 @@ export const HOUSING_SCENARIO: Scenario = {
             'The auto-generated notification letter goes to the address on file. Turnaround is 2 business days.',
           subtext:
             '"Standard procedure. I have 12 other cases. I cannot personally contact every applicant."',
+          // If policy denied: sending to wrong address means Marcus never learns
+          // he can appeal. The legal aid referral is the only option that preserves
+          // his rights — so we lock the standard letter for denied cases.
+          unavailableWhen: {
+            roleId: 'policy',
+            optionIds: ['deny'],
+            reason:
+              'His address on file is his former address — now managed by a developer\'s building supervisor. Sending a denial letter there means Marcus will not know he was denied or that a 60-day appeal window is running. Procedurally, this is a due-process failure. Your supervisor would not approve this on a denial notice.',
+          },
           effects: {
             vp: -1,
             ve: 2,

@@ -14,6 +14,24 @@ export interface DecisionOption {
   policyRef?: string;
   description: string;
   subtext: string;
+  /**
+   * If present, this option is only available when the prior decision
+   * for the specified role matches one of the listed option IDs.
+   * If null/absent, the option is always available.
+   */
+  availableWhen?: {
+    roleId: RoleId;
+    optionIds: string[];
+  };
+  /**
+   * If present, this option is suppressed (hidden or locked) when the prior
+   * decision for the specified role matches one of the listed option IDs.
+   */
+  unavailableWhen?: {
+    roleId: RoleId;
+    optionIds: string[];
+    reason: string;
+  };
   effects: {
     vp: number;
     ve: number;
