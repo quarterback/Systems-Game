@@ -42,18 +42,16 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
 
   return (
     <div className="cascade-screen">
-      {/* Outcome headline */}
       <div className="cascade-header" style={{ maxWidth: 720, margin: '0 auto 64px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 24 }}>
-          Outcome · {HOUSING_SCENARIO_TITLE}
+          Outcome · Emergency Housing Assistance
         </div>
         <h2 className={`cascade-headline ${result.outcomeType}`}>{result.outcomeHeadline}</h2>
         <p className="cascade-outcome-narrative">{result.outcomeNarrative}</p>
       </div>
 
-      {/* Decision Flow */}
       <div className="cascade-flow" style={{ maxWidth: 720, margin: '0 auto 80px' }}>
-        <div className="cascade-flow-label">How it happened — four decisions, one outcome</div>
+        <div className="cascade-flow-label">Four decisions. One outcome.</div>
 
         <div style={{
           display: 'flex',
@@ -108,7 +106,7 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
                       <div className="cascade-perspective-text">{event.backstageNote}</div>
                     </div>
                     <div className="cascade-perspective">
-                      <div className="cascade-perspective-label">Marcus experienced</div>
+                      <div className="cascade-perspective-label">What Marcus experienced</div>
                       <div className="cascade-perspective-text">{event.frontstageNote}</div>
                     </div>
                   </div>
@@ -123,9 +121,8 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
         </div>
       </div>
 
-      {/* Va Calculation */}
       <div className="va-section" style={{ maxWidth: 720, margin: '0 auto 80px' }}>
-        <div className="va-label">Civil Economics — Va = Vp + Ve + Vr</div>
+        <div className="va-label">Value accounting: Va = Vp + Ve + Vr</div>
 
         <div className="va-equation">
           <span style={{ color: 'var(--vp-color)' }}>Vp (public value)</span>
@@ -138,7 +135,7 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
         <div className="va-bars">
           <div className="va-bar-row">
             <div className="va-bar-header">
-              <span className="va-bar-name vp">Vp — Public Value Delivered</span>
+              <span className="va-bar-name vp">Vp: Public value delivered</span>
               <span className="va-bar-value" style={{ color: 'var(--vp-color)' }}>{result.vpScore >= 0 ? '+' : ''}{result.vpScore.toFixed(1)}</span>
             </div>
             <div className="va-bar-track">
@@ -148,20 +145,20 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
 
           <div className="va-bar-row">
             <div className="va-bar-header">
-              <span className="va-bar-name ve">Ve — Externalized Burden</span>
+              <span className="va-bar-name ve">Ve: Burden placed on others</span>
               <span className="va-bar-value" style={{ color: 'var(--ve-color)' }}>{result.veScore.toFixed(1)}</span>
             </div>
             <div className="va-bar-track">
               <div className="va-bar-fill ve" style={{ width: barsVisible ? `${vePct}%` : '0%' }} />
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
-              Burden shifted to Marcus, informal networks, and future public systems
+              Costs shifted to Marcus, his support network, and future public systems
             </div>
           </div>
 
           <div className="va-bar-row">
             <div className="va-bar-header">
-              <span className="va-bar-name vr">Vr — Relational Trust</span>
+              <span className="va-bar-name vr">Vr: Relational trust</span>
               <span className="va-bar-value" style={{ color: 'var(--vr-color)' }}>{result.vrScore >= 0 ? '+' : ''}{result.vrScore.toFixed(1)}</span>
             </div>
             <div className="va-bar-track">
@@ -171,14 +168,14 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
         </div>
 
         <div className="va-total">
-          <span className="va-total-label">Va — Total Administrative Value</span>
+          <span className="va-total-label">Va: Total administrative value</span>
           <span className={`va-total-value ${vaIsPositive ? 'positive' : vaIsNeutral ? 'neutral' : 'negative'}`}>
             {result.vaScore >= 0 ? '+' : ''}{result.vaScore.toFixed(1)}
           </span>
         </div>
 
         <div className="va-days" style={{ marginTop: 20 }}>
-          Total time elapsed from application to resolution:{' '}
+          Total time from application to resolution:{' '}
           <strong>{totalDays} days</strong>
         </div>
       </div>
@@ -191,5 +188,3 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
     </div>
   );
 }
-
-const HOUSING_SCENARIO_TITLE = 'Emergency Housing Assistance';

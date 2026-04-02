@@ -8,11 +8,12 @@ export function IntroScreen({ onBegin }: IntroScreenProps) {
       <div className="intro-eyebrow">Service Design Simulation · Housing</div>
       <h1 className="intro-title">System Trace</h1>
       <p className="intro-subtitle">
-        A public service is not a single decision. It is a sequence of small ones —
-        each made by a different person, under different pressure, with different information.
+        Four people. Four decisions. One person's housing on the line.
+        This simulation shows how small bureaucratic choices add up
+        to shape someone's life.
       </p>
       <p className="intro-anchor">
-        "You are not fixing the system. You are tracing how it holds together."
+        "Trace how the system holds together."
       </p>
       <button className="btn-primary" onClick={onBegin}>
         Begin the Simulation
@@ -22,7 +23,7 @@ export function IntroScreen({ onBegin }: IntroScreenProps) {
         {[
           { label: 'Players', value: '4' },
           { label: 'Scenario', value: 'Housing Assistance' },
-          { label: 'Duration', value: '45–60 min' },
+          { label: 'Duration', value: '45 to 60 min' },
         ].map(({ label, value }) => (
           <div key={label} style={{ textAlign: 'center' }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 700, color: 'var(--text-primary)' }}>

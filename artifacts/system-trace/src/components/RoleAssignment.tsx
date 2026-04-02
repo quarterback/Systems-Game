@@ -24,9 +24,8 @@ export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmen
         <div className="page-eyebrow">Step 1 of 3</div>
         <h2 className="page-title">Assign Your Roles</h2>
         <p className="page-subtitle">
-          Each person on your team will play one role within the housing services system.
-          You will each make one decision — and you will see what those four decisions
-          produce together.
+          Each teammate plays one role in the housing system. You each make
+          one decision. Then you see what those four choices produce together.
         </p>
       </div>
 
@@ -60,8 +59,7 @@ export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmen
 
       <div className="role-assignment-footer">
         <p className="assignment-note">
-          Each player will be called on in sequence. Your decisions are independent —
-          but their effects are not.
+          You decide separately. The effects combine.
         </p>
         <button
           className="btn-primary"

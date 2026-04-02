@@ -14,14 +14,13 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
   return (
     <div className="debrief-screen">
       <div className="debrief-content">
-        <div className="page-eyebrow">Debrief · Diagnostic Artifact</div>
+        <div className="page-eyebrow">Debrief</div>
 
         <p className="debrief-intro">
-          This is what your four decisions produced — not a score, not a grade.
-          A trace of how the system held together, and where it didn't.
+          Here is what your four decisions produced. A trace of where
+          the system held and where it broke down.
         </p>
 
-        {/* Decision summary */}
         <div className="debrief-section-label">Your Decisions</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, borderTop: '1px solid var(--border)' }}>
           {roles.map((role, i) => {
@@ -49,8 +48,7 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
           })}
         </div>
 
-        {/* Readings */}
-        <div className="debrief-section-label">What the Readings Say About What Just Happened</div>
+        <div className="debrief-section-label">What the Readings Say</div>
         <div className="readings-list">
           {readings.map((r, i) => (
             <div key={i} className="reading-item">
@@ -66,8 +64,7 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
           ))}
         </div>
 
-        {/* Frameworks */}
-        <div className="debrief-section-label">Course Frameworks Visible in This Run</div>
+        <div className="debrief-section-label">Course Frameworks in This Run</div>
         <div className="frameworks-grid">
           {frameworks.map((f) => (
             <div key={f.name} className="framework-card">
@@ -77,7 +74,6 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
           ))}
         </div>
 
-        {/* Discussion questions */}
         <div className="debrief-section-label">For Discussion</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {discussionQuestions.map((q, i) => (
@@ -96,10 +92,9 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
           ))}
         </div>
 
-        {/* Anchor + restart */}
         <div className="debrief-anchor">
           <p className="debrief-anchor-text">
-            "You are not fixing the system. You are tracing how it holds together."
+            "Trace how the system holds together."
           </p>
 
           <div className="debrief-footer">

@@ -467,6 +467,9 @@ h1, h2, h3 {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+  .decision-sidebar {
+    position: static;
+  }
 }
 
 .decision-sidebar {
