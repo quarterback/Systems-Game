@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "FlvO9y1lrM1XvH1kUwqLm"
+uri = "file://artifacts/system-trace/SYSTEM-TRACE-SPEC.md"
+type = "text"
+title = "System Trace: Technical Specification for Scenario Authors"
