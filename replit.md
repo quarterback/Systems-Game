@@ -94,3 +94,16 @@ Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHea
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+
+### `artifacts/system-trace` (`@workspace/system-trace`)
+
+Interactive service design simulation game for undergraduate students. Deployed at path `/`.
+
+- **Design**: Pudding.cool editorial dark aesthetic; Playfair Display serif + Inter + JetBrains Mono
+- **Flow**: intro → role-select → narrative → 4 decision rounds → cascade → debrief
+- **Scenario**: Marcus Williams housing assistance case; 4 roles (frontline, operations, policy, interface)
+- **Framework**: Va = Vp + Ve + Vr civil economics; theories from Lipsky, Rothstein, Graeber, Chachra, Davis, Downe
+- **Data files**: `src/data/types.ts`, `src/data/scenario.ts`, `src/lib/gameEngine.ts`
+- **Components**: `IntroScreen`, `RoleAssignment`, `NarrativeScreen`, `DecisionScreen`, `CascadeViz`, `DebriefScreen`
+- Frontend-only (no backend), pure React state machine, no auth required
+- `pnpm --filter @workspace/system-trace run dev` — dev server on port 21533
