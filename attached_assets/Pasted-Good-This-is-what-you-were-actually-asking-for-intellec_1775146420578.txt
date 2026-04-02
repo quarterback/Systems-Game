@@ -1,0 +1,201 @@
+Good. This is what you were actually asking for: intellectual density + citations + framing inputs, not structure or simplification.
+
+Here’s a version of your prompt that loads it with the right references, concepts, and theoretical grounding so Replit (or any agent) has real material to work from.
+
+⸻
+
+Expanded Prompt (Context-Rich, Citation-Driven)
+
+Build an interactive, browser-based service design simulation game for undergraduate students in a course on Service Design and Urban Needs and Public Mechanics.
+
+This simulation should function as a designed artifact that reveals how public services actually operate, drawing from interdisciplinary foundations in service design, urban systems, political economy, and administrative governance.
+
+The experience should be structured as a narrative, scroll-driven, data journalism-style interface inspired by The Pudding, where interaction reveals system behavior over time rather than presenting a static UI.
+
+⸻
+
+Theoretical Foundations to Embed
+
+The simulation should explicitly draw from and reflect the following bodies of work:
+
+1. Street-Level Bureaucracy
+	•	Michael Lipsky, Street-Level Bureaucracy
+Core idea: frontline workers effectively become policymakers through discretionary decisions under constraint.
+Implication for simulation: each player’s decision should reflect bounded discretion, not authority.
+
+⸻
+
+2. State-Produced Inequality
+	•	Richard Rothstein, The Color of Law
+Core idea: urban systems are not neutral; they are the result of explicit policy decisions that structure access, geography, and opportunity.  ￼
+
+Implication:
+	•	The system in the simulation must already be shaped by history
+	•	Outcomes should reflect structural bias, uneven access, and path dependency
+
+⸻
+
+3. Infrastructure + Systems Thinking
+	•	Deb Chachra, How Infrastructure Works
+	•	Nadia Eghbal, Working in Public
+
+Core idea: systems are maintained through ongoing labor, coordination, and invisible upkeep, not just design intent.
+
+Implication:
+	•	Show maintenance, repair, and breakdown
+	•	Make visible the hidden labor sustaining the system
+
+⸻
+
+4. Service Design Foundations
+	•	Lara Penin, Designing the Invisible
+	•	Stickdorn et al., This is Service Design Doing
+	•	Lou Downe, Good Services
+
+Core idea:
+	•	Services are temporal, relational, and systemic
+	•	They exist across frontstage and backstage interactions
+
+Implication:
+	•	Simulation must show journey + backstage operations simultaneously
+	•	Interventions occur at touchpoints, not system-level redesign
+
+⸻
+
+5. Bureaucracy + Administrative Systems
+	•	David Graeber, Utopia of Rules
+Core idea: bureaucracy produces both friction and stability through rules, forms, and procedures.
+
+Implication:
+	•	Include forms, delays, compliance steps, documentation
+	•	Show how “inefficiency” is often structural, not accidental
+
+⸻
+
+6. Affordances + Interaction
+	•	Jenny L. Davis, How Artifacts Afford
+
+Core idea: systems shape behavior through what they make possible or impossible.
+
+Implication:
+	•	Each decision should change what actions are possible next, not just outcomes
+
+⸻
+
+Instructor-Specific Conceptual Frame
+
+The simulation must reflect the following concepts:
+	•	Public Mechanics: understanding how services function through processes, routines, and coordination across actors  ￼
+	•	Civil Stack: layered interaction of policy, infrastructure, software, and human judgment
+	•	Delivery Forensics: using breakdowns to understand system structure
+	•	Trajectory Management: how small decisions redirect system behavior over time
+	•	Civil Economics (Va = Vp + Ve + Vr):
+	•	Vp = public value
+	•	Ve = externalities
+	•	Vr = relational trust
+
+The simulation should not reduce outcomes to efficiency. It should show value distribution across these dimensions.
+
+⸻
+
+Core Simulation Structure
+	•	Groups of 4 players
+	•	Each player holds a role within the system:
+	•	frontline worker
+	•	operations / coordination
+	•	policy / compliance
+	•	service designer / interface layer
+
+Each player makes one constrained decision per round, reflecting:
+	•	limited authority
+	•	incomplete information
+	•	system pressure
+
+They cannot:
+	•	change budgets
+	•	redesign institutions
+	•	remove constraints
+
+⸻
+
+Scenario Requirements
+
+Use a real, legible urban service system, such as:
+	•	housing onboarding (aligned with course project)
+	•	transit navigation
+	•	sanitation / trash pickup
+	•	public benefits intake
+	•	airport or mobility system
+
+The simulation must follow a specific individual navigating the system, emphasizing lived experience.
+
+⸻
+
+Dynamic Behavior (Critical Requirement)
+
+The system must demonstrate:
+	•	decision cascades
+	•	burden shifting across actors
+	•	frontstage/backstage divergence
+	•	invisible work becoming visible under strain
+
+Each round should introduce:
+	•	volume pressure
+	•	coordination breakdown
+	•	rule conflict
+	•	system latency
+	•	public trust shifts
+
+⸻
+
+Output (Non-Negotiable)
+
+The final output must be a diagnostic artifact, not a score.
+
+It should show:
+	•	how the system actually functioned
+	•	where labor accumulated
+	•	where friction moved
+	•	how decisions propagated
+	•	what the user experienced
+
+And explicitly:
+	•	Public value (Vp)
+	•	Externalities (Ve)
+	•	Relational trust (Vr)
+
+⸻
+
+Tone + Form
+	•	Avoid gamification tropes
+	•	Avoid optimization framing
+	•	Emphasize interpretation, not correctness
+
+The experience should feel like:
+	•	a designed explanation
+	•	a system revealed through interaction
+	•	a visual argument about how services work
+
+⸻
+
+Final Anchor
+
+“You are not fixing the system. You are tracing how it holds together.”
+
+⸻
+
+Why this version works (brief, not fluff)
+
+This does what you asked for:
+	•	pulls in actual readings from your syllabus
+	•	embeds your frameworks explicitly
+	•	grounds it in political + economic context (Rothstein, Lipsky, Graeber)
+	•	gives Replit enough conceptual density to generate something non-generic
+
+⸻
+
+If you want one more layer, I can add:
+	•	specific scenario scripts grounded in Color of Law logic (zoning, routing, etc.)
+	•	or a data model for how Ve/Vr actually shift across rounds
+
+But this is now doing real work.
