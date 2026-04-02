@@ -432,4 +432,158 @@ export const HOUSING_SCENARIO: Scenario = {
       ],
     },
   ],
+
+  roles: [
+    {
+      roleId: 'frontline',
+      subtitle: 'Frontline Worker',
+      description:
+        'You are the first point of contact. You decide how Marcus enters the system — or whether he does at all. Your authority is bounded: you cannot change policy, waive requirements, or allocate housing. You can determine urgency.',
+      color: '#c8974a',
+    },
+    {
+      roleId: 'operations',
+      subtitle: 'Operations & Coordination',
+      description:
+        'You manage the flow of information through the system. You verify documents, apply policy standards, and decide what "complete" means in practice. You cannot write policy. You can interpret it.',
+      color: '#4a90a3',
+    },
+    {
+      roleId: 'policy',
+      subtitle: 'Policy & Compliance',
+      description:
+        'You make the eligibility ruling. You interpret the rules and apply them to Marcus\'s case. You cannot change the threshold. You can exercise the exception that exists — if you choose to.',
+      color: '#8a7ab0',
+    },
+    {
+      roleId: 'interface',
+      subtitle: 'Service Interface Layer',
+      description:
+        'You translate the system\'s decision into Marcus\'s lived experience. You cannot change the outcome. You can determine whether he learns what it is — and what, if anything, he can do.',
+      color: '#5a9a6a',
+    },
+  ],
+
+  outcomeRules: [
+    // Denied + Legal Aid referral → appeal viable
+    {
+      requires: { policy: ['deny'], interface: ['legalaid'] },
+      outcomeType: 'denied-appeal',
+      headline: 'Denied. Fighting back.',
+      narrative:
+        'Marcus\'s application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted since. But he was referred to Legal Aid SF before the official letter went out. He has filed an appeal citing the hardship exception clause. His case is pending. He has been in emergency shelter for six weeks. He has not missed a day of work.',
+    },
+    // Denied + letter → letter went to wrong address, appeal window closed
+    {
+      requires: { policy: ['deny'], interface: ['letter'] },
+      outcomeType: 'denied-lost',
+      headline: 'Denied. Never knew why.',
+      narrative:
+        'Marcus\'s application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted for inflation or cost of living since. His denial letter was sent to 2347 Alcott Street — his former address, now managed by Citadel Property Group\'s building supervisor. He never received it. His appeal window expired 60 days later. He is currently in a family shelter on Turk Street with Destiny and Andre. He has not missed a day of work.',
+    },
+    // Denied + direct call → informed of denial, but no legal support
+    {
+      requires: { policy: ['deny'], interface: ['call'] },
+      outcomeType: 'denied-lost',
+      headline: 'Denied. Never knew why.',
+      narrative:
+        'Marcus\'s application was denied. He is $197 over a threshold that was set in 2011 and has not been adjusted for inflation or cost of living since. He was informed of the denial by phone. He asked what he could do. He was told he could appeal within 60 days. He did not know how. He is currently in a family shelter on Turk Street with Destiny and Andre. He has not missed a day of work.',
+    },
+    // Income verification → case still running, displacement costs real
+    {
+      requires: { policy: ['verify'] },
+      outcomeType: 'housed-barely',
+      headline: 'Still waiting.',
+      narrative:
+        'Marcus\'s case has been in extended income verification for {extraDays} days. He submitted his bank statements on Day 7. He has called the main line 8 times. He is told his case is "under review." His temporary housing arrangement ended. He and his children are staying with his mother in Oakland. He now commutes 2.5 hours each way to maintain his job. Destiny was transferred to a new school. Andre stopped playing soccer.',
+    },
+    // Approved quickly with relational trust → best outcome
+    {
+      requires: { policy: ['approve'] },
+      outcomeType: 'housed-well',
+      headline: 'Housed in {extraDays} days.',
+      narrative:
+        'Marcus was housed {extraDays} days after he walked into 1650 Mission Street. His children stayed enrolled at Alcott Elementary. He retained his job. He kept his mother from worrying. The system worked — not because it was designed to work for Marcus, but because four people chose to use their discretion generously within its constraints. The threshold that nearly excluded him has still not been updated.',
+      scoreCondition: { maxDaysElapsed: 22, minVrScore: 1 },
+      fallthrough: {
+        requires: { policy: ['approve'] },
+        outcomeType: 'housed-barely',
+        headline: 'Housed. Eventually. Day {extraDays}.',
+        narrative:
+          'Marcus was housed {extraDays} days after he applied. During that period, he stayed with his mother in Oakland — adding 90 minutes each way to his commute. He used all of his sick leave. His son Andre was transferred to a different school mid-semester. He kept his job, barely. The outcome meets the measure. The experience did not. The threshold that nearly excluded him has still not been updated.',
+      },
+    },
+  ],
+
+  debrief: {
+    readings: [
+      {
+        author: 'Michael Lipsky',
+        source: 'Street-Level Bureaucracy (1980)',
+        concept: 'Bounded Discretion as Policy',
+        connection:
+          'Each decision in this simulation was made under constraint: caseload pressure, supervisor expectations, undefined policy clauses. Lipsky argues that these conditions make frontline workers into effective policymakers — not through authority, but through the accumulation of small judgments.',
+      },
+      {
+        author: 'Richard Rothstein',
+        source: 'The Color of Law (2017)',
+        concept: 'Structural Bias in Neutral-Seeming Systems',
+        connection:
+          'The $3,650 threshold was set in 2011 and has not been adjusted. The neighborhoods most affected by displacement are those where Black and Latino residents are concentrated. The system that produces Marcus\'s case is not neutral — it is the result of explicit decisions made over decades.',
+      },
+      {
+        author: 'David Graeber',
+        source: 'Utopia of Rules (2015)',
+        concept: 'Bureaucratic Friction is Structural, Not Accidental',
+        connection:
+          'The documentation requirement, the deficiency notice, the undefined policy clause — these are not failures of the system. They are the system. Graeber argues that bureaucratic friction often functions as a filter, one that disadvantages those with less capacity to navigate it.',
+      },
+      {
+        author: 'Lou Downe',
+        source: 'Good Services (2020)',
+        concept: 'Services Exist in the Experience, Not the Procedure',
+        connection:
+          'Marcus\'s experience of the system differed fundamentally from what happened backstage. A service that "works" by its own metrics — file processed, case closed — may not work for the person it was designed to serve.',
+      },
+      {
+        author: 'Jenny L. Davis',
+        source: 'How Artifacts Afford (2020)',
+        concept: 'What the System Makes Possible or Impossible',
+        connection:
+          'Each decision changed what was possible next — not just for Marcus, but for the workers who followed. Section 4.2(b) exists. The hardship exception exists. But whether they are invocable depends on conditions the system itself creates.',
+      },
+      {
+        author: 'Deb Chachra',
+        source: 'How Infrastructure Works (2023)',
+        concept: 'Invisible Labor and System Maintenance',
+        connection:
+          'The system requires ongoing human effort to function — the intake coordinator who flags a case, the specialist who writes a reasoning note, the counselor who makes a call. This labor is invisible in the formal record. When it is withdrawn, the system fails.',
+      },
+    ],
+    frameworks: [
+      {
+        name: 'Public Mechanics',
+        text: 'The simulation models how services actually function: through routines, coordination across actors, and accumulated small decisions — not through single points of authority.',
+      },
+      {
+        name: 'Civil Stack',
+        text: 'Each decision operated at a different layer: policy (eligibility threshold), infrastructure (the documentation system), software (the notification letter), and human judgment (the call you made).',
+      },
+      {
+        name: 'Delivery Forensics',
+        text: 'The cascade visualization is a form of delivery forensics — using the breakdown or outcome of a service encounter to trace where the system held and where it didn\'t.',
+      },
+      {
+        name: 'Trajectory Management',
+        text: 'Decision 1 constrained Decision 2. Decision 3 determined what Decision 4 could accomplish. Small choices redirected the trajectory before any single actor saw the full path.',
+      },
+    ],
+    discussionQuestions: [
+      'Which decision had the most downstream impact? Was that visible at the time it was made?',
+      'What would you need to change to make a different outcome structurally reliable — not dependent on individual discretion?',
+      'Where did the burden go when a decision shifted it? Who absorbed it?',
+      'Rothstein argues that neutral-seeming systems can produce unequal outcomes by design. Where do you see that logic in this scenario?',
+      'What information was each worker missing? What information did they have that Marcus did not?',
+    ],
+  },
 };

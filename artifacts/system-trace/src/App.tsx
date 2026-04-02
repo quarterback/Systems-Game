@@ -103,6 +103,7 @@ export default function App() {
           result={stage.result}
           roles={roles}
           playerNames={playerNames}
+          scenario={scenario}
           onRestart={handleRestart}
         />
       )}

@@ -17,15 +17,14 @@ export interface DecisionOption {
   /**
    * If present, this option is only available when the prior decision
    * for the specified role matches one of the listed option IDs.
-   * If null/absent, the option is always available.
    */
   availableWhen?: {
     roleId: RoleId;
     optionIds: string[];
   };
   /**
-   * If present, this option is suppressed (hidden or locked) when the prior
-   * decision for the specified role matches one of the listed option IDs.
+   * If present, this option is locked when the prior decision for the
+   * specified role matches one of the listed option IDs.
    */
   unavailableWhen?: {
     roleId: RoleId;
@@ -61,12 +60,67 @@ export interface NarrativeBeat {
   label?: string;
 }
 
+/**
+ * A declarative outcome rule. Rules are evaluated in order; the first match wins.
+ * `requires` maps roleId → allowed optionId values for that role.
+ * All specified roles must match; unspecified roles are unconstrained.
+ *
+ * `narrative` may contain {daysElapsed} and {extraDays} template tokens which the
+ * engine substitutes at runtime.
+ */
+export interface OutcomeRule {
+  requires: Partial<Record<RoleId, string[]>>;
+  outcomeType: 'housed-well' | 'housed-barely' | 'denied-appeal' | 'denied-lost';
+  headline: string;
+  narrative: string;
+  /**
+   * Optional secondary condition evaluated after Va/days are computed.
+   * Useful for threshold-based outcomes (e.g. "housed-well only if fast").
+   */
+  scoreCondition?: {
+    maxDaysElapsed?: number;
+    minVrScore?: number;
+  };
+  /**
+   * If scoreCondition exists and is not met, fall through to this rule instead.
+   */
+  fallthrough?: Omit<OutcomeRule, 'fallthrough'>;
+}
+
+export interface DebriefReading {
+  author: string;
+  source: string;
+  concept: string;
+  connection: string;
+}
+
+export interface DebriefFramework {
+  name: string;
+  text: string;
+}
+
+export interface ScenarioDebrief {
+  readings: DebriefReading[];
+  frameworks: DebriefFramework[];
+  discussionQuestions: string[];
+}
+
+export interface ScenarioRole {
+  roleId: RoleId;
+  subtitle: string;
+  description: string;
+  color: string;
+}
+
 export interface Scenario {
   id: string;
   title: string;
   domain: string;
   narrativeBeats: NarrativeBeat[];
+  roles: ScenarioRole[];
   decisions: DecisionPoint[];
+  outcomeRules: OutcomeRule[];
+  debrief: ScenarioDebrief;
 }
 
 export interface CascadeEvent {
