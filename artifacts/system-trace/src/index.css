@@ -691,10 +691,9 @@ h1, h2, h3 {
   margin-bottom: 16px;
 }
 
-.cascade-headline.housed-well { color: var(--vp-color); }
-.cascade-headline.housed-barely { color: var(--accent-amber); }
-.cascade-headline.denied-appeal { color: var(--accent-amber); }
-.cascade-headline.denied-lost { color: var(--ve-color); }
+.cascade-headline.positive { color: var(--vp-color); }
+.cascade-headline.mixed { color: var(--accent-amber); }
+.cascade-headline.negative { color: var(--ve-color); }
 
 .cascade-outcome-narrative {
   font-size: 18px;

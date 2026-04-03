@@ -1,4 +1,4 @@
-import type { GameResult, CascadeEvent, RoleId, Role, Scenario, OutcomeRule } from '../data/types';
+import type { GameResult, CascadeEvent, RoleId, Role, Scenario, OutcomeRule, OutcomeTone } from '../data/types';
 
 /**
  * Substitute template tokens in a string.
@@ -74,7 +74,8 @@ export function computeResult(
   const vaScore = clampedVp - clampedVe + clampedVr;
 
   // Resolve outcome type, headline, and narrative from scenario.outcomeRules
-  let outcomeType: GameResult['outcomeType'] = 'housed-barely';
+  let outcomeType = 'unresolved';
+  let outcomeTone: OutcomeTone = 'mixed';
   let outcomeHeadline = 'Outcome unclear.';
   let outcomeNarrative = 'The system processed the case. The outcome is uncertain.';
 
@@ -91,6 +92,7 @@ export function computeResult(
       if (!conditionMet && rule.fallthrough) {
         // Use the fallthrough rule
         outcomeType = rule.fallthrough.outcomeType;
+        outcomeTone = rule.fallthrough.outcomeTone;
         outcomeHeadline = applyTemplate(rule.fallthrough.headline, daysElapsed);
         outcomeNarrative = applyTemplate(rule.fallthrough.narrative, daysElapsed);
         break;
@@ -98,6 +100,7 @@ export function computeResult(
     }
 
     outcomeType = rule.outcomeType;
+    outcomeTone = rule.outcomeTone;
     outcomeHeadline = applyTemplate(rule.headline, daysElapsed);
     outcomeNarrative = applyTemplate(rule.narrative, daysElapsed);
     break;
@@ -125,6 +128,7 @@ export function computeResult(
     outcomeNarrative,
     outcomeHeadline,
     outcomeType,
+    outcomeTone,
   };
 }
 

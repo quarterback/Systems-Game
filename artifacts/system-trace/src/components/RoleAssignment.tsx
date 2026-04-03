@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import type { Role } from '../data/types';
+import type { Role, Scenario } from '../data/types';
 
 interface RoleAssignmentProps {
   roles: Role[];
   playerNames: string[];
+  scenario: Scenario;
   onComplete: (names: string[]) => void;
 }
 
-export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmentProps) {
+export function RoleAssignment({ roles, playerNames, scenario, onComplete }: RoleAssignmentProps) {
   const [names, setNames] = useState<string[]>(playerNames.map((n) => n || ''));
 
   const handleChange = (index: number, value: string) => {
@@ -24,7 +25,7 @@ export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmen
         <div className="page-eyebrow">Step 1 of 3</div>
         <h2 className="page-title">Assign Your Roles</h2>
         <p className="page-subtitle">
-          Each teammate plays one role in the housing system.
+          Each teammate plays one role in the system.
           Each of you makes one decision. Then you see what those four choices produce together.
         </p>
       </div>
@@ -67,7 +68,7 @@ export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmen
           disabled={!canContinue}
           style={{ opacity: canContinue ? 1 : 0.4, cursor: canContinue ? 'pointer' : 'not-allowed' }}
         >
-          Meet Marcus
+          Meet {scenario.applicantName}
         </button>
       </div>
     </div>
