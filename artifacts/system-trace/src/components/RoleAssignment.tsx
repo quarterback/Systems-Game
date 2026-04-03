@@ -24,8 +24,8 @@ export function RoleAssignment({ roles, playerNames, onComplete }: RoleAssignmen
         <div className="page-eyebrow">Step 1 of 3</div>
         <h2 className="page-title">Assign Your Roles</h2>
         <p className="page-subtitle">
-          Each teammate plays one role in the housing system. You each make
-          one decision. Then you see what those four choices produce together.
+          Each teammate plays one role in the housing system.
+          Each of you makes one decision. Then you see what those four choices produce together.
         </p>
       </div>
 

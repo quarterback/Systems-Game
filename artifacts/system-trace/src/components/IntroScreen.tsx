@@ -8,9 +8,8 @@ export function IntroScreen({ onBegin }: IntroScreenProps) {
       <div className="intro-eyebrow">Service Design Simulation · Housing</div>
       <h1 className="intro-title">System Trace</h1>
       <p className="intro-subtitle">
-        Four people. Four decisions. One person's housing on the line.
-        This simulation shows how small bureaucratic choices add up
-        to shape someone's life.
+        Four people make four decisions about one person's housing.
+        See how small bureaucratic choices accumulate.
       </p>
       <p className="intro-anchor">
         "Trace how the system holds together."

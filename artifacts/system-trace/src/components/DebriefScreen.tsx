@@ -17,8 +17,8 @@ export function DebriefScreen({ result, roles, playerNames, scenario, onRestart 
         <div className="page-eyebrow">Debrief</div>
 
         <p className="debrief-intro">
-          Here is what your four decisions produced. A trace of where
-          the system held and where it broke down.
+          Your four decisions produced this outcome. Below is a trace
+          of where the system held and where it broke down.
         </p>
 
         <div className="debrief-section-label">Your Decisions</div>

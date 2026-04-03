@@ -23,7 +23,7 @@ function getOptionAvailability(
   if (option.availableWhen) {
     const priorDecision = decisions[option.availableWhen.roleId];
     if (!priorDecision || !option.availableWhen.optionIds.includes(priorDecision)) {
-      return { available: false, reason: 'Not applicable given the current case state.' };
+      return { available: false, reason: 'This option requires a different earlier decision.' };
     }
   }
   return { available: true };
@@ -46,7 +46,6 @@ export function DecisionScreen({
   const playerName = playerNames[roleIndex] || `Player ${roleIndex + 1}`;
   const progress = (roleIndex / roles.length) * 100;
 
-  // Resolve conditional context based on prior decisions
   let contextNote = decisionPoint.contextIntro;
   if (decisionPoint.conditionalContext) {
     if (role.id === 'interface') {
@@ -84,7 +83,6 @@ export function DecisionScreen({
       </div>
 
       <div className="decision-layout" style={{ '--role-color': role.color } as React.CSSProperties}>
-        {/* Sidebar */}
         <div className="decision-sidebar">
           <div className="decision-role-badge">{role.subtitle}</div>
           <div className="decision-actor-name">{decisionPoint.actorName}</div>
@@ -103,7 +101,6 @@ export function DecisionScreen({
           <div className="decision-player-name">{playerName}</div>
         </div>
 
-        {/* Main decision area */}
         <div className="decision-main">
           <div className="decision-step-indicator">
             Decision {roleIndex + 1} of {roles.length}
@@ -148,7 +145,7 @@ export function DecisionScreen({
                           opacity: 0.7,
                         }}
                       >
-                        Not available
+                        Locked
                       </span>
                     )}
                   </div>
@@ -180,7 +177,7 @@ export function DecisionScreen({
               Discuss as a team. {playerName} makes the final call.
               {annotatedOptions.some((o) => !o.available) && (
                 <span style={{ display: 'block', marginTop: 6, color: 'var(--text-dim)' }}>
-                  Some options are unavailable given earlier decisions in this case.
+                  Earlier decisions have locked some options.
                 </span>
               )}
             </p>

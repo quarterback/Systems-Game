@@ -13,7 +13,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       type: 'body',
       content:
-        'Marcus Williams is 34. He has worked for the City Department of Public Works for seven years, fixing water mains, clearing storm drains, keeping the city\'s infrastructure running. He shows up every day. He has never missed a paycheck.',
+        'Marcus Williams is 34. He has worked for the City Department of Public Works for seven years, fixing water mains, clearing storm drains, keeping the city\'s infrastructure running. He shows up every day. He has made every paycheck.',
     },
     {
       type: 'body',
@@ -51,12 +51,12 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       type: 'pullquote',
       content:
-        '"The threshold of $3,650 was set in 2011. It has never been adjusted for inflation or cost of living."',
+        '"The threshold of $3,650 was set in 2011. It has remained unchanged since then."',
     },
     {
       type: 'body',
       content:
-        'On September 7th, Day 3 of his 30, Marcus arranged childcare, took a half-day without pay, and walked into the Office of Housing Services at 1650 Mission Street. He brought his government ID, eviction notice, pay stub, and expired lease. He didn\'t have a utility bill because utilities were included in his rent.',
+        'On September 7th, Day 3 of his 30, Marcus arranged childcare, took a half-day without pay, and walked into the Office of Housing Services at 1650 Mission Street. He brought his government ID, eviction notice, pay stub, and expired lease. His rent covered utilities, so he had only his lease as proof of address.',
     },
     {
       type: 'aside',
@@ -79,7 +79,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       type: 'body',
       content:
-        'Each one is working within real constraints: caseloads, policies, supervisor expectations, systems that don\'t talk to each other. Each one will do something that seems reasonable.',
+        'Each one is working within real constraints: caseloads, policies, supervisor expectations, and systems that operate independently of each other. Each one will do something that seems reasonable.',
     },
     {
       type: 'body',
@@ -99,7 +99,7 @@ export const HOUSING_SCENARIO: Scenario = {
       contextIntro:
         'Marcus Williams is at your window. He took a half-day from work. His kids are at a neighbor\'s. His building was sold. He has 27 days left.',
       framing:
-        'His documentation is incomplete: no utility bill. Expedited status requires supervisor approval and is reserved for immediate shelter threats. He has a neighbor\'s couch for now. How do you categorize this intake?',
+        'His documentation is incomplete: the utility bill is missing. Expedited status requires supervisor approval and is reserved for immediate shelter threats. He has a neighbor\'s couch for now. How do you categorize this intake?',
       options: [
         {
           id: 'standard',
@@ -108,7 +108,7 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Log the case as standard intake. Marcus gets a queue number and an 18 to 21 business day review window.',
           subtext:
-            '"No basis for expedited. He has temporary housing. Standard processing."',
+            '"Standard track. He has temporary housing. Processing begins when the queue reaches his number."',
           effects: {
             vp: 0,
             ve: 2,
@@ -153,9 +153,9 @@ export const HOUSING_SCENARIO: Scenario = {
             vr: -2,
             daysAdded: 9,
             backstageNote:
-              'Case flagged as Pending Documentation. No review initiated. Marcus must return.',
+              'Case flagged as Pending Documentation. Review paused. Marcus must return.',
             frontstageNote:
-              'Marcus asks what "utility bill in his name" means when utilities were included in rent. He\'s told to contact his landlord.',
+              'Marcus asks what "utility bill in his name" means when his rent covered utilities. He\'s told to contact his landlord.',
           },
         },
       ],
@@ -167,14 +167,14 @@ export const HOUSING_SCENARIO: Scenario = {
       actorTitle: 'Documentation Specialist',
       actorYears: 3,
       systemPressure:
-        'You have 40 files today. The system auto-rejects files with missing documents unless you manually override. Section 4.2(b) allows "reasonable substitute documentation at reviewer discretion." Added in 2019. Never formally interpreted by your office.',
+        'You have 40 files today. The system auto-rejects files with missing documents unless you manually override. Section 4.2(b) allows "reasonable substitute documentation at reviewer discretion." Added in 2019. Your office has left this clause uninterpreted.',
       contextIntro:
         'Marcus\'s file has arrived. It includes: government ID, eviction notice, pay stub, expired lease. Missing: a utility bill in his name.',
       conditionalContext: {
         standard:
-          'The file entered the standard queue on Day 3. It sat for 21 business days before reaching you. No utility bill on file.',
+          'The file entered the standard queue on Day 3. It sat for 21 business days before reaching you. The utility bill field is empty.',
         expedited:
-          'Your supervisor flagged this as priority and asked you to clear it within 48 hours. No utility bill on file.',
+          'Your supervisor flagged this as priority and asked you to clear it within 48 hours. The utility bill field is empty.',
         hold:
           'Marcus came back on Day 12 with a letter from his former landlord, Mr. Adeyemi, confirming that utilities were included in rent at 2347 Alcott Street. The letter is now in the file.',
       },
@@ -188,12 +188,12 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Generate a deficiency notice. Marcus has 5 business days to submit a utility bill or approved alternative before the file is closed.',
           subtext:
-            '"Policy is policy. I\'m not qualified to decide what counts as a substitute."',
+            '"Policy is policy. Deciding what counts as a substitute is above my role."',
           unavailableWhen: {
             roleId: 'frontline',
             optionIds: ['hold'],
             reason:
-              'Marcus already came back with a landlord letter confirming utilities-included rent. A second deficiency notice for the same item is procedurally invalid.',
+              'Marcus already returned with a landlord letter confirming utilities-included rent. A second deficiency notice for the same item is procedurally invalid.',
           },
           effects: {
             vp: -1,
@@ -203,7 +203,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'Deficiency notice mailed to 2347 Alcott Street, his former address. Marcus must respond within 5 business days.',
             frontstageNote:
-              'Marcus never gets the letter. He calls the main number four times over 5 days. On day six, someone tells him to come in again.',
+              'The letter goes to his old address. Marcus calls the main number four times over 5 days. On day six, someone tells him to come in again.',
           },
         },
         {
@@ -222,7 +222,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'File cleared and forwarded to Eligibility Review. Your reasoning note takes 20 minutes.',
             frontstageNote:
-              'Marcus gets no communication. His file keeps moving through the system without him knowing.',
+              'Marcus receives silence. His file keeps moving through the system without his knowledge.',
           },
         },
         {
@@ -232,7 +232,7 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Flag the file to your supervisor for a formal policy interpretation. Estimated turnaround: 7 to 10 business days.',
           subtext:
-            '"I shouldn\'t be making policy calls on my own. This is above my level."',
+            '"Policy calls at this level belong with my supervisor."',
           unavailableWhen: {
             roleId: 'frontline',
             optionIds: ['expedited'],
@@ -247,7 +247,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'File enters the supervisor queue. Response arrives on Day 9: "Use discretion per §4.2(b)." File returns to you.',
             frontstageNote:
-              'Marcus hears nothing for 9 days. Still in temporary housing. He has no idea what\'s happening.',
+              'Marcus hears silence for 9 days. He remains in temporary housing, waiting.',
           },
         },
       ],
@@ -272,7 +272,7 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Marcus is $197 over the income limit. Issue a denial. The standard denial letter includes instructions for the 60-day appeal window.',
           subtext:
-            '"I can\'t set a precedent by ignoring the threshold. He has appeal rights."',
+            '"Ignoring the threshold sets a precedent. He has appeal rights."',
           effects: {
             vp: -3,
             ve: 4,
@@ -302,7 +302,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'Exception documented and submitted. Secondary review takes 12 days. Approval confirmed.',
             frontstageNote:
-              'Marcus hears nothing for 12 days. His temporary housing situation gets uncertain.',
+              'Marcus hears silence for 12 days. His temporary housing situation grows uncertain.',
           },
         },
         {
@@ -328,7 +328,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'Case paused pending verification. Request letter mailed to 2347 Alcott Street.',
             frontstageNote:
-              'Marcus hears nothing for days. When he finally reaches someone, he\'s told his case is "under review."',
+              'Marcus hears silence for days. When he finally reaches someone, he\'s told his case is "under review."',
           },
         },
       ],
@@ -340,7 +340,7 @@ export const HOUSING_SCENARIO: Scenario = {
       actorTitle: 'Navigation Counselor',
       actorYears: 5,
       systemPressure:
-        'You have 12 other cases to contact today. The letter system is automated and sends notifications to the address of record. Marcus listed 2347 Alcott Street, his former address. He has no new permanent address.',
+        'You have 12 other cases to contact today. The letter system is automated and sends notifications to the address of record. Marcus listed 2347 Alcott Street, his former address. He lacks a new permanent address.',
       contextIntro:
         'Marcus\'s case has been processed. The system generated an outcome notification.',
       conditionalContext: {
@@ -349,10 +349,10 @@ export const HOUSING_SCENARIO: Scenario = {
         denied:
           'His application was denied. He has 60 days to file an appeal. The hardship exception clause he may qualify for is in paragraph 11 of the policy appendix.',
         pending:
-          'His case is in extended review. There\'s no resolution date. His status reads "Under Review."',
+          'His case is in extended review. The resolution date is open-ended. His status reads "Under Review."',
       },
       framing:
-        'The system will send a notification to 2347 Alcott Street. That address belongs to a developer. Marcus doesn\'t live there anymore. How do you handle communication?',
+        'The system will send a notification to 2347 Alcott Street. That address belongs to a developer now. Marcus was evicted from there. How do you handle communication?',
       options: [
         {
           id: 'letter',
@@ -366,7 +366,7 @@ export const HOUSING_SCENARIO: Scenario = {
             roleId: 'policy',
             optionIds: ['deny'],
             reason:
-              'His address on file is his old address, now managed by a developer. Sending a denial there means Marcus won\'t learn he was denied or that a 60-day appeal window is running. That\'s a due-process failure.',
+              'His address on file is his old address, now managed by a developer. Sending a denial there means the letter reaches the developer. Marcus remains unaware of the denial and the running 60-day appeal window. That is a due-process failure.',
           },
           effects: {
             vp: -1,
@@ -376,7 +376,7 @@ export const HOUSING_SCENARIO: Scenario = {
             backstageNote:
               'Letter mailed to 2347 Alcott Street. Delivered to Citadel Property Group\'s building manager.',
             frontstageNote:
-              'Marcus never gets the letter. He calls the main line 6 times over two weeks. He\'s told to wait for the letter.',
+              'The letter goes to his old address. Marcus calls the main line 6 times over two weeks. He\'s told to wait for the letter.',
           },
         },
         {
@@ -386,7 +386,7 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Spend 20 minutes on the phone with him. Walk him through the outcome, next steps, and any appeal or onboarding process.',
           subtext:
-            '"His address on file is a building he was evicted from. If I don\'t call, he may never find out what happened."',
+            '"His address on file is the building he was evicted from. A phone call is the only way to reach him."',
           effects: {
             vp: 1,
             ve: -1,
@@ -405,7 +405,7 @@ export const HOUSING_SCENARIO: Scenario = {
           description:
             'Refer Marcus to Legal Aid SF\'s housing unit before sending official notification. Adds 2 to 3 days.',
           subtext:
-            '"He may not understand what the outcome means. Legal aid can make sure he actually gets the benefit of whatever the system decided."',
+            '"He may lack the context to understand what the outcome means. Legal aid can make sure he gets the full benefit of whatever the system decided."',
           effects: {
             vp: 1,
             ve: 0,
@@ -426,28 +426,28 @@ export const HOUSING_SCENARIO: Scenario = {
       roleId: 'frontline',
       subtitle: 'Frontline Worker',
       description:
-        'You\'re the first point of contact. You decide how Marcus enters the system. You can\'t change policy, waive requirements, or allocate housing. You can set the urgency level.',
+        'You\'re the first point of contact. You decide how Marcus enters the system. Your authority covers urgency level only. You set the pace.',
       color: '#c8974a',
     },
     {
       roleId: 'operations',
       subtitle: 'Operations & Coordination',
       description:
-        'You manage how information moves through the system. You verify documents, apply standards, and decide what "complete" means in practice. You don\'t write policy. You interpret it.',
+        'You manage how information moves through the system. You verify documents, apply standards, and decide what "complete" means in practice. You interpret policy.',
       color: '#4a90a3',
     },
     {
       roleId: 'policy',
       subtitle: 'Policy & Compliance',
       description:
-        'You make the eligibility ruling. You interpret the rules and apply them to Marcus\'s case. You can\'t change the threshold. You can use the exception clause.',
+        'You make the eligibility ruling. You interpret the rules and apply them to Marcus\'s case. The threshold is fixed. The exception clause is yours to use.',
       color: '#8a7ab0',
     },
     {
       roleId: 'interface',
       subtitle: 'Service Interface Layer',
       description:
-        'You translate the system\'s decision into Marcus\'s actual experience. You can\'t change the outcome. You can control whether he finds out what it is and what he can do about it.',
+        'You translate the system\'s decision into Marcus\'s actual experience. The outcome is already set. You control whether he learns what it is and what he can do about it.',
       color: '#5a9a6a',
     },
   ],
@@ -456,21 +456,21 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       requires: { policy: ['deny'], interface: ['legalaid'] },
       outcomeType: 'denied-appeal',
-      headline: 'Denied. Fighting back.',
+      headline: 'Denied, and fighting back.',
       narrative:
-        'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has never been adjusted. He was referred to Legal Aid SF before the official letter went out. He filed an appeal citing the hardship exception. His case is pending. He\'s been in emergency shelter for six weeks. He hasn\'t missed a day of work.',
+        'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has remained unchanged. He was referred to Legal Aid SF before the official letter went out. He filed an appeal citing the hardship exception. His case is pending. He\'s been in emergency shelter for six weeks. He has made every shift at work.',
     },
     {
       requires: { policy: ['deny'], interface: ['call'] },
       outcomeType: 'denied-lost',
-      headline: 'Denied. No path forward.',
+      headline: 'Denied, searching for options.',
       narrative:
-        'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has never been adjusted. He was told over the phone. He asked what he could do. He was told he could appeal within 60 days. He didn\'t know how. He\'s in a family shelter on Turk Street with Destiny and Andre. He hasn\'t missed a day of work.',
+        'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has remained unchanged. He was told over the phone. He asked what he could do. He was told he could appeal within 60 days. He was unclear on the process. He\'s in a family shelter on Turk Street with Destiny and Andre. He has made every shift at work.',
     },
     {
       requires: { policy: ['verify'] },
       outcomeType: 'housed-barely',
-      headline: 'Still waiting.',
+      headline: 'Marcus is still waiting.',
       narrative:
         'Marcus\'s case has been in extended income verification for {extraDays} days. He submitted bank statements on Day 7. He\'s called the main line 8 times. Every time, he\'s told his case is "under review." His temporary housing fell through. He and his kids are staying with his mother in Oakland. He commutes 2.5 hours each way to keep his job. Destiny transferred schools. Andre quit soccer.',
     },
@@ -479,14 +479,14 @@ export const HOUSING_SCENARIO: Scenario = {
       outcomeType: 'housed-well',
       headline: 'Housed in {extraDays} days.',
       narrative:
-        'Marcus was housed {extraDays} days after walking into 1650 Mission Street. His kids stayed at Alcott Elementary. He kept his job. He kept his mother from worrying. Four people used their discretion generously within the system\'s constraints. The threshold that nearly excluded him still hasn\'t been updated.',
+        'Marcus was housed {extraDays} days after walking into 1650 Mission Street. His kids stayed at Alcott Elementary. He kept his job. He kept his mother from worrying. Four people used their discretion generously within the system\'s constraints. The threshold that almost excluded him remains unchanged.',
       scoreCondition: { maxDaysElapsed: 22, minVrScore: 1 },
       fallthrough: {
         requires: { policy: ['approve'] },
         outcomeType: 'housed-barely',
-        headline: 'Housed. Eventually. Day {extraDays}.',
+        headline: 'Housed on Day {extraDays}, eventually.',
         narrative:
-          'Marcus was housed {extraDays} days after applying. During that time, he stayed with his mother in Oakland, adding 90 minutes each way to his commute. He used all his sick leave. Andre transferred schools mid-semester. He kept his job, barely. The outcome meets the measure. The experience didn\'t. The threshold that nearly excluded him still hasn\'t been updated.',
+          'Marcus was housed {extraDays} days after applying. During that time, he stayed with his mother in Oakland, adding 90 minutes each way to his commute. He used all his sick leave. Andre transferred schools mid-semester. He kept his job, barely. The outcome meets the measure. The experience fell short. The threshold that almost excluded him remains unchanged.',
       },
     },
   ],
@@ -505,14 +505,14 @@ export const HOUSING_SCENARIO: Scenario = {
         source: 'The Color of Law (2017)',
         concept: 'Structural bias in neutral-looking systems',
         connection:
-          'The $3,650 threshold was set in 2011 and never adjusted. The neighborhoods most affected by displacement are where Black and Latino residents are concentrated. This system looks neutral. It reflects decades of explicit decisions.',
+          'The $3,650 threshold was set in 2011 and has remained unchanged. The neighborhoods most affected by displacement are where Black and Latino residents are concentrated. The system looks neutral. It reflects decades of explicit decisions.',
       },
       {
         author: 'David Graeber',
         source: 'Utopia of Rules (2015)',
         concept: 'Bureaucratic friction is structural',
         connection:
-          'The documentation requirement, the deficiency notice, the vague policy clause: these are the system working as designed. Graeber argues that bureaucratic friction functions as a filter, one that hits hardest on people with the least capacity to navigate it.',
+          'The documentation requirement, the deficiency notice, the vague policy clause: these are the system working as designed. Graeber argues that bureaucratic friction functions as a filter. It hits hardest on people with the least capacity to navigate it.',
       },
       {
         author: 'Lou Downe',
@@ -526,14 +526,14 @@ export const HOUSING_SCENARIO: Scenario = {
         source: 'How Artifacts Afford (2020)',
         concept: 'What the system makes possible',
         connection:
-          'Each decision changed what was possible next, for Marcus and for the workers after him. Section 4.2(b) exists. The hardship exception exists. Whether they\'re usable depends on conditions the system itself creates.',
+          'Each decision changed what was possible next, for Marcus and for the workers after him. Section 4.2(b) exists. The hardship exception exists. Whether they are usable depends on conditions the system itself creates.',
       },
       {
         author: 'Deb Chachra',
         source: 'How Infrastructure Works (2023)',
         concept: 'Invisible labor and system maintenance',
         connection:
-          'This system requires ongoing human effort: the coordinator who flags a case, the specialist who writes a reasoning note, the counselor who picks up the phone. This labor doesn\'t show up in the formal record. When it\'s withdrawn, the system fails.',
+          'This system requires ongoing human effort: the coordinator who flags a case, the specialist who writes a reasoning note, the counselor who picks up the phone. This labor is absent from the formal record. When it\'s withdrawn, the system fails.',
       },
     ],
     frameworks: [
@@ -559,7 +559,7 @@ export const HOUSING_SCENARIO: Scenario = {
       'What would need to change so that a good outcome is built into the system, rather than depending on individual discretion?',
       'When a decision shifted a burden, where did it land? Who absorbed it?',
       'Rothstein argues that neutral-looking systems can produce unequal outcomes by design. Where do you see that in this scenario?',
-      'What was each worker missing? What did they know that Marcus didn\'t?',
+      'What was each worker missing? What did they know that Marcus lacked?',
     ],
   },
 };
