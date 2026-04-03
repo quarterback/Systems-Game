@@ -68,9 +68,12 @@ export interface NarrativeBeat {
  * `narrative` may contain {daysElapsed} and {extraDays} template tokens which the
  * engine substitutes at runtime.
  */
+export type OutcomeTone = 'positive' | 'mixed' | 'negative';
+
 export interface OutcomeRule {
   requires: Partial<Record<RoleId, string[]>>;
-  outcomeType: 'housed-well' | 'housed-barely' | 'denied-appeal' | 'denied-lost';
+  outcomeType: string;
+  outcomeTone: OutcomeTone;
   headline: string;
   narrative: string;
   /**
@@ -116,6 +119,9 @@ export interface Scenario {
   id: string;
   title: string;
   domain: string;
+  applicantName: string;
+  subtitle: string;
+  entryDescription: string;
   narrativeBeats: NarrativeBeat[];
   roles: ScenarioRole[];
   decisions: DecisionPoint[];
@@ -147,5 +153,6 @@ export interface GameResult {
   cascadeEvents: CascadeEvent[];
   outcomeNarrative: string;
   outcomeHeadline: string;
-  outcomeType: 'housed-well' | 'housed-barely' | 'denied-appeal' | 'denied-lost';
+  outcomeType: string;
+  outcomeTone: OutcomeTone;
 }

@@ -4,6 +4,9 @@ export const HOUSING_SCENARIO: Scenario = {
   id: 'housing-assistance',
   title: 'Emergency Housing Assistance',
   domain: 'Housing Services',
+  applicantName: 'Marcus',
+  subtitle: 'Four people make four decisions about one person\'s housing. See how small bureaucratic choices accumulate.',
+  entryDescription: 'Marcus walks into the Office of Housing Services',
 
   narrativeBeats: [
     {
@@ -456,6 +459,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       requires: { policy: ['deny'], interface: ['legalaid'] },
       outcomeType: 'denied-appeal',
+      outcomeTone: 'mixed',
       headline: 'Denied, and fighting back.',
       narrative:
         'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has remained unchanged. He was referred to Legal Aid SF before the official letter went out. He filed an appeal citing the hardship exception. His case is pending. He\'s been in emergency shelter for six weeks. He has made every shift at work.',
@@ -463,6 +467,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       requires: { policy: ['deny'], interface: ['call'] },
       outcomeType: 'denied-lost',
+      outcomeTone: 'negative',
       headline: 'Denied, searching for options.',
       narrative:
         'Marcus\'s application was denied. He\'s $197 over a threshold set in 2011 that has remained unchanged. He was told over the phone. He asked what he could do. He was told he could appeal within 60 days. He was unclear on the process. He\'s in a family shelter on Turk Street with Destiny and Andre. He has made every shift at work.',
@@ -470,6 +475,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       requires: { policy: ['verify'] },
       outcomeType: 'housed-barely',
+      outcomeTone: 'mixed',
       headline: 'Marcus is still waiting.',
       narrative:
         'Marcus\'s case has been in extended income verification for {extraDays} days. He submitted bank statements on Day 7. He\'s called the main line 8 times. Every time, he\'s told his case is "under review." His temporary housing fell through. He and his kids are staying with his mother in Oakland. He commutes 2.5 hours each way to keep his job. Destiny transferred schools. Andre quit soccer.',
@@ -477,6 +483,7 @@ export const HOUSING_SCENARIO: Scenario = {
     {
       requires: { policy: ['approve'] },
       outcomeType: 'housed-well',
+      outcomeTone: 'positive',
       headline: 'Housed in {extraDays} days.',
       narrative:
         'Marcus was housed {extraDays} days after walking into 1650 Mission Street. His kids stayed at Alcott Elementary. He kept his job. He kept his mother from worrying. Four people used their discretion generously within the system\'s constraints. The threshold that almost excluded him remains unchanged.',
@@ -484,6 +491,7 @@ export const HOUSING_SCENARIO: Scenario = {
       fallthrough: {
         requires: { policy: ['approve'] },
         outcomeType: 'housed-barely',
+        outcomeTone: 'mixed',
         headline: 'Housed on Day {extraDays}, eventually.',
         narrative:
           'Marcus was housed {extraDays} days after applying. During that time, he stayed with his mother in Oakland, adding 90 minutes each way to his commute. He used all his sick leave. Andre transferred schools mid-semester. He kept his job, barely. The outcome meets the measure. The experience fell short. The threshold that almost excluded him remains unchanged.',

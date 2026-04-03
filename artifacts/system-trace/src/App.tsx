@@ -17,16 +17,26 @@ type Stage =
   | { name: 'cascade'; result: GameResult }
   | { name: 'debrief'; result: GameResult };
 
+const scenarioIds = Object.keys(SCENARIOS);
+const scenarioTitles: Record<string, string> = {};
+for (const [id, s] of Object.entries(SCENARIOS)) {
+  scenarioTitles[id] = s.title;
+}
+
 export default function App() {
   const [stage, setStage] = useState<Stage>({ name: 'intro' });
+  const [scenarioId, setScenarioId] = useState(DEFAULT_SCENARIO_ID);
   const [playerNames, setPlayerNames] = useState<string[]>(['', '', '', '']);
   const [decisions, setDecisions] = useState<Record<RoleId, string>>(
     {} as Record<RoleId, string>
   );
 
-  // Scenario derived from registry — swap the id to change scenarios
-  const scenario: Scenario = SCENARIOS[DEFAULT_SCENARIO_ID];
+  const scenario: Scenario = SCENARIOS[scenarioId];
   const roles = getRolesFromScenario(scenario);
+
+  const handleSelectScenario = (id: string) => {
+    setScenarioId(id);
+  };
 
   const handleIntroComplete = () => setStage({ name: 'role-select' });
 
@@ -67,12 +77,19 @@ export default function App() {
   return (
     <div className="app-root">
       {stage.name === 'intro' && (
-        <IntroScreen onBegin={handleIntroComplete} />
+        <IntroScreen
+          scenario={scenario}
+          scenarioIds={scenarioIds}
+          scenarioTitles={scenarioTitles}
+          onSelectScenario={handleSelectScenario}
+          onBegin={handleIntroComplete}
+        />
       )}
       {stage.name === 'role-select' && (
         <RoleAssignment
           roles={roles}
           playerNames={playerNames}
+          scenario={scenario}
           onComplete={handleRolesComplete}
         />
       )}
@@ -95,6 +112,7 @@ export default function App() {
           result={stage.result}
           roles={roles}
           playerNames={playerNames}
+          scenario={scenario}
           onComplete={handleCascadeComplete}
         />
       )}

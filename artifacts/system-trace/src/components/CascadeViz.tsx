@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import type { GameResult, Role } from '../data/types';
+import type { GameResult, Role, Scenario } from '../data/types';
 
 interface CascadeVizProps {
   result: GameResult;
   roles: Role[];
   playerNames: string[];
+  scenario: Scenario;
   onComplete: (result: GameResult) => void;
 }
 
@@ -19,7 +20,7 @@ function deltaLabel(n: number, prefix: string) {
   );
 }
 
-export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVizProps) {
+export function CascadeViz({ result, roles, playerNames, scenario, onComplete }: CascadeVizProps) {
   const [barsVisible, setBarsVisible] = useState(false);
 
   useEffect(() => {
@@ -44,9 +45,9 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
     <div className="cascade-screen">
       <div className="cascade-header" style={{ maxWidth: 720, margin: '0 auto 64px' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 24 }}>
-          Outcome · Emergency Housing Assistance
+          Outcome · {scenario.title}
         </div>
-        <h2 className={`cascade-headline ${result.outcomeType}`}>{result.outcomeHeadline}</h2>
+        <h2 className={`cascade-headline ${result.outcomeTone}`}>{result.outcomeHeadline}</h2>
         <p className="cascade-outcome-narrative">{result.outcomeNarrative}</p>
       </div>
 
@@ -66,7 +67,7 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
         }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)' }}>Day 3</div>
           <div style={{ width: 1, height: 14, background: 'var(--border)', margin: '0 4px' }} />
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Marcus walks into the Office of Housing Services</div>
+          <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{scenario.entryDescription}</div>
         </div>
 
         <div className="cascade-nodes">
@@ -106,7 +107,7 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
                       <div className="cascade-perspective-text">{event.backstageNote}</div>
                     </div>
                     <div className="cascade-perspective">
-                      <div className="cascade-perspective-label">What Marcus experienced</div>
+                      <div className="cascade-perspective-label">What {scenario.applicantName} experienced</div>
                       <div className="cascade-perspective-text">{event.frontstageNote}</div>
                     </div>
                   </div>
@@ -152,7 +153,7 @@ export function CascadeViz({ result, roles, playerNames, onComplete }: CascadeVi
               <div className="va-bar-fill ve" style={{ width: barsVisible ? `${vePct}%` : '0%' }} />
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
-              Costs shifted to Marcus, his support network, and future public systems
+              Costs shifted to {scenario.applicantName}, their support network, and future public systems
             </div>
           </div>
 
